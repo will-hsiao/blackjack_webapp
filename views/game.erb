@@ -17,7 +17,7 @@
    <% f_gameover = FALSE  %>
 
    <% card_new[0]=card_suite.product(card_rank)  %>
-   <% card_new[1]=card_suite.product(card_rank)  %>
+   <% #card_new[1]=card_suite.product(card_rank)  %>
 
    <%= "Deck number: #{card_new.count}\n"  %>
     <br />
@@ -37,18 +37,25 @@
   <% host_card << card_shuffle.pop %>
 
   <% player_sum=  calculate(player_card) %>
+  <% session[:player_card]=player_card %>
+  <% session[:host_card]=host_card %>
+  <% session[:deck]=card_shuffle %>
  <%= "#{name}'s card: #{player_card} with #{player_sum} points" %>
- <% display_card(player_card) %>
+ <div class="center-block">
+      <%= display_cards(player_card[0]) %>
+      <%= display_cards(player_card[1]) %>
+ </div>
  <br/>
   <% host_sum=calculate(host_card) %>
  <%=  "Host's card: #{host_card} with #{host_sum} points" %>
-  <% display_card(host_card) %>
-
+ <div class="center-block">
+      <img src= "images/cards/cover.jpg" />
+      <%= display_cards(host_card[1]) %>
+  </div>
  <% #Player turn %>
 <%= "You busted " if player_sum > 21 %>
 <%= "You got BlackJack!" if player_sum == 21 %>
 <% if player_sum < 21 %>
-
     <form action="hit" method="post" />
         <input type="submit" name="Hit" class="btn" value="Hit" />
     </form>

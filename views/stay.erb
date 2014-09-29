@@ -1,0 +1,46 @@
+<% player_card=session[:player_card] %>
+<% player_card << session[:deck].pop %>
+<% host_card=session[:host_card] %>
+<% host_sum=  calculate(host_card) %>
+<% player_sum=  calculate(player_card) %>
+
+<%= "#{session[:player_name]}'s card: #{player_card} with #{player_sum} points" %>
+<div class="center-block">
+<% player_card.each do |c| %>
+      <%= display_cards(c) %>
+<% end %>
+</div>
+<%=  "Host's card: #{host_card} with #{host_sum} points" %>
+<div id="host_card" class="center-block">
+      <% host_card.each_with_index do |c, k| %>
+      <% if k==0 %>
+            <img src= "images/cards/cover.jpg" />
+      <% else %>
+            <%= display_cards(c) %>
+      <% end %>
+      <% end %>
+  </div>
+
+  <%  if host_sum < 17 %>
+      <% host_card << session[:deck].pop %>
+      <% host_sum=calculate(host_card) %>
+      <% puts "Host's card: #{host_card} with #{host_sum} points" %>
+      <div id="host_card" class="center-block">
+          <% host_card.each_with_index do |c, k| %>
+              <% if k==0 %>
+                  <img src= "images/cards/cover.jpg" />
+              <% else %>
+                  <%= display_cards(c) %>
+               <% end %>
+        <% end %>
+      </div>
+ <% elsif host_sum < 21 %>
+      <% puts "Host win! You LOSE!" if host_sum > player_sum %>
+      <% puts "It's a tie" if host_sum == player_sum %>
+      <% puts "You WIN!, #{name} is the BEST!" if host_sum < player_sum %>
+      <% f_gameover = TRUE %>
+<% else  %>
+      <% puts "Host busted!" if host_sum > 21 %>
+      <% puts "Host got Blackjack. You LOSE!" if host_sum == 21 %>
+      <% f_gameover = TRUE %>
+<% end %>

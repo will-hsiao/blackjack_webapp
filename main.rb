@@ -26,21 +26,18 @@ helpers do
   return sum  
  end
 
-    def display_card(card)
-        card.each do |c|
-            file_name = c[0]+'s_'+c[1]+'jpg'
-            <img src="/images/cards/file_name" />
-        end
+    def display_cards(c)
+            "<img src=\"/images/cards/"+c[0].to_s+'s_'+c[1].to_s+'.jpg' +"\" />"
     end
 
 end
 
 get '/' do
-    if session[:player_name]
-        redirect '/game'
-    else
+    #if session[:player_name]
+        #redirect '/game'
+    #else
         erb :new_player
-    end
+    #end
 end
 
 
@@ -48,11 +45,11 @@ post '/game' do
     erb :game
 end
 
-post 'hit' do
+post '/hit' do
     erb :hit
 end
 
-post 'stay' do
+post '/stay' do
     erb :stay
 end
 
