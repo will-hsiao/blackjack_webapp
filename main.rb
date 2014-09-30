@@ -24,7 +24,7 @@ helpers do
   aces.count.times {sum-=9 if sum > 21}
 
   return sum  
- end
+  end
 
     def display_cards(c)
             "<img src=\"/images/cards/"+c[0].to_s+'s_'+c[1].to_s+'.jpg' +"\" />"
@@ -34,7 +34,7 @@ end
 
 get '/' do
     if session[:player_name]
-        redirect '/game'
+      redirect '/game'
     else
         erb :new_player
     end
@@ -46,7 +46,6 @@ get '/game' do
   #Set new cards  
     card_suite=["spade", "heart", "diamond", "club"]  
     card_rank=["ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, "queen", "king", "jack"]  
-    session[:player_name] = params['username'] 
 #Shuffle Cards  
     session[:deck] = card_suite.product(card_rank)  
     session[:deck].shuffle!
@@ -69,6 +68,11 @@ end
 
 post '/stay' do
     erb :stay
+end
+
+post '/game' do
+  session[:player_name] = params['username']
+  redirect '/game'
 end
 
 

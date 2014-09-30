@@ -1,0 +1,12 @@
+form #hit_form {
+	display: float;
+	margin-right: 10px;
+}
+
+form #stay_form {
+	display: float;
+}
+
+img {
+	border: 2px solid black;
+}

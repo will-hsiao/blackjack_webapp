@@ -2,30 +2,32 @@
 
 
 <% #Begin Game! %>
-<h2> -----------------Welcome to BlackJack!  ----------------\n" </h2>
-
+<h1>-Welcome to BlackJack! </h1>
+ 
+ <% host_sum=calculate(session[:host_card]) %>
+ <%=  "Host's card: #{session[:host_card]} with #{host_sum} points" %>
+ <div class="well">
+      <img src= "images/cards/cover.jpg" />
+      <%= display_cards(session[:host_card][1]) %>
+  </div>
 
 <% player_sum=calculate(session[:player_card])%>
  <%= "#{session[:player_name]}'s card: #{session[:player_card]} with #{player_sum} points" %>
- <div class="center-block">
+ <div class="well">
       <%= display_cards(session[:player_card][0]) %>
       <%= display_cards(session[:player_card][1]) %>
  </div>
  <br/>
-  <% host_sum=calculate(session[:host_card]) %>
- <%=  "Host's card: #{session[:host_card]} with #{host_sum} points" %>
- <div class="center-block">
-      <img src= "images/cards/cover.jpg" />
-      <%= display_cards(session[:host_card][1]) %>
-  </div>
+ 
+
  <% #Player turn %>
 
 <% if player_sum < 21 %>
-    <form action="hit" method="post" />
-        <input type="submit" name="Hit" class="btn" value="Hit" />
+    <form id="hit_form" action="hit" method="post" />
+        <input type="submit" name="Hit" class="btn btn-success" value="Hit" />
     </form>
-    <form action="stay" method="post" />
-        <input type="submit" name="Stay" class="btn" value="Stay"/>
+    <form id="stay_form" action="stay" method="post" />
+        <input type="submit" name="Stay" class="btn btn-warning" value="Stay"/>
     </form>
 <% elsif player_sum > 21 %>
     <% @error="You busted " %>
