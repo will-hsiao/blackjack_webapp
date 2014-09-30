@@ -3,8 +3,8 @@
 <% host_card=session[:host_card] %>
 
  <% player_sum=  calculate(player_card) %>
-  <% session[:player_card]=player_card %>
- <%= "#{session[:player_name]}'s card: #{player_card} with #{player_sum} points" %>
+<% session[:player_card]=player_card %>
+<%= "#{session[:player_name]}'s card: #{player_card} with #{player_sum} points" %>
 <div class="center-block">
 <% player_card.each do |c| %>
       <%= display_cards(c) %>

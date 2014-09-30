@@ -33,16 +33,34 @@ helpers do
 end
 
 get '/' do
-    #if session[:player_name]
-        #redirect '/game'
-    #else
+    if session[:player_name]
+        redirect '/game'
+    else
         erb :new_player
-    #end
+    end
 end
 
 
-post '/game' do
-    erb :game
+get '/game' do
+
+  #Set new cards  
+    card_suite=["spade", "heart", "diamond", "club"]  
+    card_rank=["ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, "queen", "king", "jack"]  
+    session[:player_name] = params['username'] 
+#Shuffle Cards  
+    session[:deck] = card_suite.product(card_rank)  
+    session[:deck].shuffle!
+    session[:player_card]=[]
+    session[:host_card]=[]
+
+ #Dispatch Cards 
+
+   session[:player_card] << session[:deck].pop 
+   session[:host_card] << session[:deck].pop
+   session[:player_card] << session[:deck].pop 
+   session[:host_card] << session[:deck].pop
+
+   erb :game
 end
 
 post '/hit' do

@@ -1,65 +1,34 @@
 
-<%#Set new cards  %>
-<% card_suite=["spade", "heart", "diamond", "club"]  %>
-<% card_rank=["ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, "queen", "king", "jack"]  %>
 
-<% name=  params['username'] %>
-<% session[:player_name] = name %>
 
 <% #Begin Game! %>
-<% "\n-----------------Welcome to BlackJack!  #{name}-----------------\n" %>
+<h2> -----------------Welcome to BlackJack!  ----------------\n" </h2>
 
-<%#Shuffle Cards  %>
-  <%card_shuffle=[]  %>
-   <% player_card=[]  %>
-   <% host_card=[]  %>
-   <% card_new=[]  %>
-   <% f_gameover = FALSE  %>
 
-   <% card_new[0]=card_suite.product(card_rank)  %>
-   <% #card_new[1]=card_suite.product(card_rank)  %>
-
-   <%= "Deck number: #{card_new.count}\n"  %>
-    <br />
-  
-  <% card_new.each do |deck|  %>
-     <% card_shuffle+=deck  %>
-   <% end  %>
-   <% card_shuffle.shuffle!  %>
-   <% "Card count = #{card_shuffle.count}\n"  %>
-   <br />
-
-<% #Dispatch Cards %>
-
-  <% player_card << card_shuffle.pop %>
-  <% host_card << card_shuffle.pop %>
-  <% player_card << card_shuffle.pop %>
-  <% host_card << card_shuffle.pop %>
-
-  <% player_sum=  calculate(player_card) %>
-  <% session[:player_card]=player_card %>
-  <% session[:host_card]=host_card %>
-  <% session[:deck]=card_shuffle %>
- <%= "#{name}'s card: #{player_card} with #{player_sum} points" %>
+<% player_sum=calculate(session[:player_card])%>
+ <%= "#{session[:player_name]}'s card: #{session[:player_card]} with #{player_sum} points" %>
  <div class="center-block">
-      <%= display_cards(player_card[0]) %>
-      <%= display_cards(player_card[1]) %>
+      <%= display_cards(session[:player_card][0]) %>
+      <%= display_cards(session[:player_card][1]) %>
  </div>
  <br/>
-  <% host_sum=calculate(host_card) %>
- <%=  "Host's card: #{host_card} with #{host_sum} points" %>
+  <% host_sum=calculate(session[:host_card]) %>
+ <%=  "Host's card: #{session[:host_card]} with #{host_sum} points" %>
  <div class="center-block">
       <img src= "images/cards/cover.jpg" />
-      <%= display_cards(host_card[1]) %>
+      <%= display_cards(session[:host_card][1]) %>
   </div>
  <% #Player turn %>
-<%= "You busted " if player_sum > 21 %>
-<%= "You got BlackJack!" if player_sum == 21 %>
+
 <% if player_sum < 21 %>
     <form action="hit" method="post" />
         <input type="submit" name="Hit" class="btn" value="Hit" />
     </form>
     <form action="stay" method="post" />
-        <input type="submit" name="Stay" class="brn" value="Stay"/>
+        <input type="submit" name="Stay" class="btn" value="Stay"/>
     </form>
+<% elsif player_sum > 21 %>
+    <% @error="You busted " %>
+<% elsif player_sum == 21 %>
+    <% @success="You got Blackjack!" %>
 <%end%>
