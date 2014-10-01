@@ -46,6 +46,19 @@ get '/' do
     end
 end
 
+get '/new_player' do
+  erb :new_player
+end
+
+post '/new_player' do
+  if params[:username] == ""
+    @error = "You must input your name."
+    halt (erb :new_player)
+  end
+  session[:player_name]=params[:username]
+  redirect '/game'
+end
+
 
 get '/game' do
 
@@ -72,13 +85,12 @@ post '/hit' do
     session[:player_card] << session[:deck].pop
     player_sum = calculate (session[:player_card])
     if player_sum > 21
-        @error = "You busted " 
+        @error = "You busted!" 
         @player_button_on = false
     elsif player_sum == 21
         @success = "You got BlackJack!" 
         @player_button_on = false
     end
-    @host_first_card_on = true
     erb :game
 end
 
@@ -91,7 +103,7 @@ get '/host' do
     host_sum = calculate (session[:host_card])
 
     if host_sum > 21
-        @sucess = "Host busted, you win! " 
+        @success = "Host busted, you win! " 
     elsif host_sum == 21
         @error = "Host got BlackJack! You lose!" 
     elsif host_sum < 17
@@ -100,15 +112,15 @@ get '/host' do
         @host_button_on = false
         redirect '/game/compare'
     end
-    @host_first_card_on = true
     @player_button_on = false
     @host_first_card_on = true
+    
     erb :game
 end
 
 post '/host_hit' do
     session[:host_card] << session[:deck].pop
-    redirect 'host'
+    redirect '/host'
 end
 
 post '/game' do

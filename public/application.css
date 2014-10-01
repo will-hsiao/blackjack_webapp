@@ -1,13 +1,13 @@
-form #hit_form {
+form#hit_form {
 	float: left;
+	margin-top: 10px;
 	margin-right: 10px;
 }
 
-form #stay_form {
+form#stay_form {
 	float: left;
-      display: inline;
 }
 
 img {
-	border: 2px solid black;
+	border: 2px solid blue;
 }
