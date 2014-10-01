@@ -1,10 +1,11 @@
 form #hit_form {
-	display: float;
+	float: left;
 	margin-right: 10px;
 }
 
 form #stay_form {
-	display: float;
+	float: left;
+      display: inline;
 }
 
 img {

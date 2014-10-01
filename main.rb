@@ -32,9 +32,15 @@ helpers do
 
 end
 
+before do
+    @player_button_on = true
+    @host_button_on = false
+    @host_first_card_on = false
+end
+
 get '/' do
     if session[:player_name]
-      redirect '/game'
+        redirect '/game'
     else
         erb :new_player
     end
@@ -63,16 +69,67 @@ get '/game' do
 end
 
 post '/hit' do
-    erb :hit
+    session[:player_card] << session[:deck].pop
+    player_sum = calculate (session[:player_card])
+    if player_sum > 21
+        @error = "You busted " 
+        @player_button_on = false
+    elsif player_sum == 21
+        @success = "You got BlackJack!" 
+        @player_button_on = false
+    end
+    @host_first_card_on = true
+    erb :game
 end
 
 post '/stay' do
-    erb :stay
+    @player_button_on = false
+    redirect '/host'
+end
+
+get '/host' do
+    host_sum = calculate (session[:host_card])
+
+    if host_sum > 21
+        @sucess = "Host busted, you win! " 
+    elsif host_sum == 21
+        @error = "Host got BlackJack! You lose!" 
+    elsif host_sum < 17
+        @host_button_on = true
+    else
+        @host_button_on = false
+        redirect '/game/compare'
+    end
+    @host_first_card_on = true
+    @player_button_on = false
+    @host_first_card_on = true
+    erb :game
+end
+
+post '/host_hit' do
+    session[:host_card] << session[:deck].pop
+    redirect 'host'
 end
 
 post '/game' do
   session[:player_name] = params['username']
   redirect '/game'
+end
+
+get '/game/compare' do
+    #Compare Player and Host
+    host_sum = calculate (session[:host_card])
+    player_sum = calculate (session[:player_card])
+    if host_sum > player_sum
+        @error="Host Win! You lose!"
+    elsif host_sum == player_sum
+        @success="It's a tie!"
+    else
+        @success="You win!"
+    end
+    @host_first_card_on = true
+    @player_button_on = false
+    erb :game
 end
 
 

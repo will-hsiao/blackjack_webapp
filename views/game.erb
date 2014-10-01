@@ -1,36 +1,43 @@
-
-
-
 <% #Begin Game! %>
-<h1>-Welcome to BlackJack! </h1>
- 
- <% host_sum=calculate(session[:host_card]) %>
- <%=  "Host's card: #{session[:host_card]} with #{host_sum} points" %>
+<div class="alert alert-info">
+<h1>Welcome to BlackJack! </h1>
+</div>
+
+<%# display host cards %>
+<% host_sum=  calculate(session[:host_card]) %>
+  <%=  "Host's card: #{session[:host_card]} with #{host_sum} points" %>
  <div class="well">
-      <img src= "images/cards/cover.jpg" />
-      <%= display_cards(session[:host_card][1]) %>
+      <% session[:host_card].each_with_index do |c, k| %>
+      <% if k==0 && @host_first_card_on==false %>
+            <img src= "images/cards/cover.jpg" />
+      <% else %>
+            <%= display_cards(c) %>
+      <% end %>
+      <% end %>
   </div>
 
-<% player_sum=calculate(session[:player_card])%>
- <%= "#{session[:player_name]}'s card: #{session[:player_card]} with #{player_sum} points" %>
- <div class="well">
-      <%= display_cards(session[:player_card][0]) %>
-      <%= display_cards(session[:player_card][1]) %>
+ <% if @host_button_on == true %>
+    <form id="hit_form" action="host_hit" method="post" />
+            <input type="submit" class="btn btn-success" value="Proceed to Host's next card" />
+    </form>
+<%end%>
+
+<% player_sum=  calculate(session[:player_card]) %>
+<%= "#{session[:player_name]}'s card: #{session[:player_card]} with #{player_sum} points" %>
+<div class="well">
+<% session[:player_card].each do |c| %>
+      <%= display_cards(c) %>
+<% end %>
  </div>
- <br/>
  
 
- <% #Player turn %>
 
-<% if player_sum < 21 %>
+ <% if @player_button_on == true %>
+    <%= "#{session[:player_name]} have #{player_sum}, what's next?" %>
     <form id="hit_form" action="hit" method="post" />
-        <input type="submit" name="Hit" class="btn btn-success" value="Hit" />
+            <input type="submit" name="Hit" class="btn btn-success" value="Hit" />
     </form>
     <form id="stay_form" action="stay" method="post" />
-        <input type="submit" name="Stay" class="btn btn-warning" value="Stay"/>
+           <input type="submit" name="Stay" class="btn btn-warning" value="Stay"/>
     </form>
-<% elsif player_sum > 21 %>
-    <% @error="You busted " %>
-<% elsif player_sum == 21 %>
-    <% @success="You got Blackjack!" %>
 <%end%>
