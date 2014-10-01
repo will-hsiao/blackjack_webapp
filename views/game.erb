@@ -6,23 +6,22 @@
 <% host_sum=  calculate(session[:host_card]) %>
 
   <div class="well">
-      <% if @host_first_card_on == true %>
-        <%= "Host has #{host_sum}" %>
-      <% else %>
-        <%=  "Host's card:" %>
-      <% end %><br/>
+        <%=  "Host's card:" %><br/>
       <% session[:host_card].each_with_index do |c, k| %>
         <% if k==0 && @host_first_card_on==false %>
             <img src= "images/cards/cover.jpg" />
         <% else %>
             <%= display_cards(c) %>
         <% end %>
-      <% end %><br/>
+      <% end %>
       <% if @host_button_on == true %>
-          <form id="hit_form" action="host_hit" method="post" />
-            <input type="submit" class="btn btn-success" value="Proceed to Host's next card >>>" />
+          <br/>
+          <%= "Host has #{host_sum}, and will hit." %>
+          <form action="host_hit" method="post" />
+            <input type="submit" class="btn btn-primary" value="Click to see Host's next card >>>" />
           </form>
       <%end%>
+
   </div>
 
 
