@@ -78,7 +78,6 @@ post '/hit' do
         @success = "You got BlackJack!" 
         @player_button_on = false
     end
-    @host_first_card_on = true
     erb :game
 end
 
@@ -108,7 +107,7 @@ end
 
 post '/host_hit' do
     session[:host_card] << session[:deck].pop
-    redirect 'host'
+    redirect '/host'
 end
 
 post '/game' do
