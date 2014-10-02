@@ -30,6 +30,24 @@ helpers do
             "<img src=\"/images/cards/"+c[0].to_s+'s_'+c[1].to_s+'.jpg' +"\" />"
     end
 
+    def lose!(msg)
+        @error = msg
+        @player_button_on = false
+        @play_again_button_on = true
+    end
+
+    def win!(msg)
+      @success = msg
+      @player_button_on = false
+      @play_again_button_on = true
+    end
+
+    def tie!(msg)
+      @success = msg
+      @player_button_on = false
+      @play_again_button_on = true
+    end
+
 end
 
 before do
@@ -44,6 +62,19 @@ get '/' do
     else
         erb :new_player
     end
+end
+
+get '/new_player' do
+  erb :new_player
+end
+
+post '/new_player' do
+  if params[:username] == ""
+    @error = "You must input your name."
+    halt (erb :new_player)
+  end
+  session[:player_name]=params[:username]
+  redirect '/game'
 end
 
 
@@ -72,17 +103,14 @@ post '/hit' do
     session[:player_card] << session[:deck].pop
     player_sum = calculate (session[:player_card])
     if player_sum > 21
-        @error = "You busted " 
-        @player_button_on = false
+        lose!("#{session[:player_name]} busted at #{player_sum}!")
     elsif player_sum == 21
-        @success = "You got BlackJack!" 
-        @player_button_on = false
+        win!("#{session[:player_name]} hit Blackjack!")
     end
     erb :game
 end
 
 post '/stay' do
-    @player_button_on = false
     redirect '/host'
 end
 
@@ -90,17 +118,16 @@ get '/host' do
     host_sum = calculate (session[:host_card])
 
     if host_sum > 21
-        @sucess = "Host busted, you win! " 
+        #@success = "Host busted, you win! " 
+        win!("Host busted at #{host_sum}, #{session[:player_name]} win! " )
     elsif host_sum == 21
-        @error = "Host got BlackJack! You lose!" 
+        lose!("Host hits BlackJack! #{session[:player_name]} lose!" )
     elsif host_sum < 17
         @host_button_on = true
-    else
+    elsif host_sum >=17
         @host_button_on = false
         redirect '/game/compare'
     end
-    @host_first_card_on = true
-    @player_button_on = false
     @host_first_card_on = true
     erb :game
 end
@@ -120,16 +147,14 @@ get '/game/compare' do
     host_sum = calculate (session[:host_card])
     player_sum = calculate (session[:player_card])
     if host_sum > player_sum
-        @error="Host Win! You lose!"
+        lose!("Host Win at #{host_sum}! #{session[:player_name]} lose at #{player_sum}!")
     elsif host_sum == player_sum
-        @success="It's a tie!"
+        tie!("It's a tie at #{player_sum} !")
     else
-        @success="You win!"
+        win!("#{session[:player_name]} win at #{player_sum}!")
     end
     @host_first_card_on = true
-    @player_button_on = false
     erb :game
 end
-
 
 

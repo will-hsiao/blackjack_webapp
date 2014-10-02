@@ -1,31 +1,40 @@
 <% #Begin Game! %>
-<div class="alert alert-info">
+
 <h3>Welcome to BlackJack! </h3>
-</div>
+<% if @play_again_button_on == true %>
+    <form action="/game" method="get">
+      <input type="submit" value="Play again" class="btn btn-info"/>
+    </form>
+<% end %>
 
 <%# display host cards %>
 <% host_sum=  calculate(session[:host_card]) %>
-  <%=  "Host's card: #{session[:host_card]} with #{host_sum} points" %>
- <div class="well">
+
+  <div class="well">
+        <%=  "Host's card:" %><br/>
       <% session[:host_card].each_with_index do |c, k| %>
-      <% if k==0 && @host_first_card_on==false %>
+        <% if k==0 && @host_first_card_on==false %>
             <img src= "images/cards/cover.jpg" />
-      <% else %>
+        <% else %>
             <%= display_cards(c) %>
+        <% end %>
       <% end %>
-      <% end %>
+      <% if @host_button_on == true %>
+          <br/>
+          <%= "Host has #{host_sum}, and will hit." %>
+          <form action="host_hit" method="post" />
+            <input type="submit" class="btn btn-primary" value="Click to see Host's next card >>>" />
+          </form>
+      <%end%>
+
   </div>
 
- <% if @host_button_on == true %>
-    <form id="hit_form" action="host_hit" method="post" />
-            <input type="submit" class="btn btn-success" value="Proceed to Host's next card" />
-    </form>
-<%end%>
+
 
 <% player_sum=  calculate(session[:player_card]) %>
-<%= "#{session[:player_name]}'s card: #{session[:player_card]} with #{player_sum} points" %>
 <div class="well">
-<% session[:player_card].each do |c| %>
+  <%= "#{session[:player_name]}'s card:" %><br/>
+  <% session[:player_card].each do |c| %>
       <%= display_cards(c) %>
 <% end %>
  </div>
@@ -33,11 +42,11 @@
 
 
  <% if @player_button_on == true %>
-    <%= "#{session[:player_name]} have #{player_sum}, what's next?" %>
-    <form id="hit_form" action="hit" method="post" />
+    <%= "#{session[:player_name]} has #{player_sum}, what's next step?" %><br/>
+    <form id="hit_form" action="hit" method="post">
             <input type="submit" name="Hit" class="btn btn-success" value="Hit" />
     </form>
-    <form id="stay_form" action="stay" method="post" />
+    <form id="stay_form" action="stay" method="post">
            <input type="submit" name="Stay" class="btn btn-warning" value="Stay"/>
     </form>
 <%end%>
