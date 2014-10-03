@@ -2,7 +2,10 @@ require 'rubygems'
 require 'sinatra'
 require 'pry'
 
-set :sessions, true
+#set :sessions, true
+use Rack::Session::Cookie, :key => 'rack.session',
+                           :path => '/',
+                           :secret => 'my_random_whatever' 
 
 helpers do
   def calculate(card)
