@@ -115,6 +115,7 @@ post '/stay' do
 end
 
 get '/host' do
+    player_button_on = false
     host_sum = calculate (session[:host_card])
 
     if host_sum > 21
