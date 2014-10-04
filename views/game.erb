@@ -37,12 +37,9 @@
   <% session[:player_card].each do |c| %>
       <%= display_cards(c) %>
 <% end %>
- </div>
- 
-
 
  <% if @player_button_on == true %>
-    <%= "#{session[:player_name]} has #{player_sum}, what's next step?" %><br/>
+    <br/><%= "#{session[:player_name]} has #{player_sum}, what's next step?" %><br/>
     <form id="hit_form" action="hit" method="post">
             <input type="submit" name="Hit" class="btn btn-success" value="Hit" />
     </form>
@@ -50,3 +47,6 @@
            <input type="submit" name="Stay" class="btn btn-warning" value="Stay"/>
     </form>
 <%end%>
+
+ </div>
+ 
