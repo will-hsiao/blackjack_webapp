@@ -106,9 +106,9 @@ post '/hit' do
     session[:player_card] << session[:deck].pop
     player_sum = calculate (session[:player_card])
     if player_sum > 21
-        lose!("#{session[:player_name]} busted at #{player_sum}!")
+        lose!("#{session[:player_name]} is busted at #{player_sum}!")
     elsif player_sum == 21
-        win!("#{session[:player_name]} hit Blackjack!")
+        win!("#{session[:player_name]} hits Blackjack!")
     end
     erb :game
 end
@@ -123,9 +123,9 @@ get '/host' do
 
     if host_sum > 21
         #@success = "Host busted, you win! " 
-        win!("Host busted at #{host_sum}, #{session[:player_name]} win! " )
+        win!("Host is busted at #{host_sum}, #{session[:player_name]} wins! " )
     elsif host_sum == 21
-        lose!("Host hits BlackJack! #{session[:player_name]} lose!" )
+        lose!("Host hits BlackJack! #{session[:player_name]} loses!" )
     elsif host_sum < 17
         @host_button_on = true
     elsif host_sum >=17
@@ -151,11 +151,11 @@ get '/game/compare' do
     host_sum = calculate (session[:host_card])
     player_sum = calculate (session[:player_card])
     if host_sum > player_sum
-        lose!("Host Win at #{host_sum}! #{session[:player_name]} lose at #{player_sum}!")
+        lose!("Host wins at #{host_sum}! #{session[:player_name]} loses at #{player_sum}!")
     elsif host_sum == player_sum
         tie!("It's a tie at #{player_sum} !")
     else
-        win!("#{session[:player_name]} win at #{player_sum}!")
+        win!("#{session[:player_name]} wins at #{player_sum}!")
     end
     @host_first_card_on = true
     erb :game
